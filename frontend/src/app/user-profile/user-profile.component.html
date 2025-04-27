@@ -1,0 +1,19 @@
+<div class="user-profile">
+    @if (isLoggedIn) {
+      <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-button">
+        <img [src]="userPicture" alt="User profile" class="user-avatar">
+        <span class="user-name">{{ userName }}</span>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>登出</span>
+        </button>
+      </mat-menu>
+    } @else {
+      <button mat-button (click)="login()">
+        <mat-icon>login</mat-icon>
+        <span>登入</span>
+      </button>
+    }
+  </div>

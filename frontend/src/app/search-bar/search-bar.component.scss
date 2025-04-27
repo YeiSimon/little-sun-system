@@ -1,0 +1,17 @@
+.search-bar-container {
+    padding: 8px 52px 4px 8px;
+    border-radius: 32px;
+    display: flex;
+    align-items: center;
+    background: #eaf1fb;
+
+    > input{
+        font-size: 1.1rem;
+        align-items: center;
+        outline: none;
+        background: inherit;
+        border: none;
+        min-width: 352px;
+        vertical-align: middle;/* Add some space between icon and input */
+    }
+}

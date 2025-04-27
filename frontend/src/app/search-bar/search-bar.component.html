@@ -1,0 +1,14 @@
+<mat-toolbar>
+<div class = "search-bar-container" 
+cdkOverlayOrigin #overlayPosition="">
+    <button mat-icon-button (click)="searchUsers()" [disabled]="!searchTerm().trim()">
+        <mat-icon>search</mat-icon>
+    </button>
+    <input type="text" (input)="searchTerm.set($any($event.target).value)" [value]="searchTerm()" placeholder="Search by number or Nickname" (click)="overlayOpen.set(true)">
+</div>
+</mat-toolbar>
+<ng-template 
+cdkConnectedOverlay 
+[cdkConnectedOverlayOrigin]="overlayPosition" 
+[cdkConnectedOverlayOpen]="overlayOpen()">
+</ng-template>

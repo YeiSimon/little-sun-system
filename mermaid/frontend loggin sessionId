@@ -1,0 +1,40 @@
+```mermaid
+flowchart TD
+    A[User Accesses Protected Route] --> B{Check localStorage}
+    
+    B -->|isLoggedIn: true| C[Call Session Verification API]
+    B -->|isLoggedIn: false| D[Redirect to Login Page]
+    
+    C --> E[API: /api/verify-session]
+    
+    E --> F{Session Valid?}
+    
+    F -->|Yes| G[Allow Access to Route]
+    F -->|No| H[Clear localStorage]
+    H --> D
+    
+    F -->|Error| I[Handle API Error]
+    I --> H
+    
+    subgraph "Backend Verification"
+        E --> J[Read Session Cookie]
+        J --> K[Check Session Validity]
+        K --> L[Return Status]
+    end
+    
+    subgraph "Initial Login Process"
+        M[User Logs In] --> N[POST /api/login/google]
+        N --> O[Backend Creates Session]
+        O --> P[Set HttpOnly Cookie]
+        P --> Q[Return User Info + isLoggedIn:true]
+        Q --> R[Store isLoggedIn in localStorage]
+    end
+    
+    subgraph "Session Expiration Handling"
+        S[Any Protected API Call] --> T{Session Expired?}
+        T -->|Yes| U[Return 401 Unauthorized]
+        U --> V[Angular Interceptor Catches 401]
+        V --> H
+        T -->|No| W[Continue Normal Flow]
+    end
+```

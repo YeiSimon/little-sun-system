@@ -1,0 +1,115 @@
+<app-search-bar (resultsChange)="onResultsChange($event)"></app-search-bar>
+
+<div class="mat-elevation-z2">
+  <table mat-table [dataSource]="dataSource" matSort class="full-width-table" aria-label="Customer Data">
+
+    <!-- 日期 -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>日期</th>
+      <td mat-cell *matCellDef="let row">{{ row.date }}</td>
+    </ng-container>
+
+    <!-- 客戶名 -->
+    <ng-container matColumnDef="customerName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>客戶名</th>
+      <td mat-cell *matCellDef="let row">{{ row.customerName }}</td>
+    </ng-container>
+
+    <!-- 電話 -->
+    <ng-container matColumnDef="number">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>電話</th>
+      <td mat-cell *matCellDef="let row">{{ row.number }}</td>
+    </ng-container>
+
+    <!-- 生日 -->
+    <ng-container matColumnDef="birthday">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>生日</th>
+      <td mat-cell *matCellDef="let row">{{ row.birthday }}</td>
+    </ng-container>
+
+    <!-- 流水號 -->
+    <ng-container matColumnDef="serialNumber">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>流水號</th>
+      <td mat-cell *matCellDef="let row">{{ row.serialNumber }}</td>
+    </ng-container>
+
+    <!-- 名稱 -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>名稱</th>
+      <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+    </ng-container>
+
+    <!-- 消費項目1 -->
+    <ng-container matColumnDef="serviceItem1">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>消費項目1</th>
+      <td mat-cell *matCellDef="let row">{{ row.serviceItem1 }}</td>
+    </ng-container>
+
+    <!-- 消費項目2 -->
+    <ng-container matColumnDef="serviceItem2">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>消費項目2</th>
+      <td mat-cell *matCellDef="let row">{{ row.serviceItem2 }}</td>
+    </ng-container>
+
+    <!-- 附加品項1 -->
+    <ng-container matColumnDef="extraItem1">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>附加品項1</th>
+      <td mat-cell *matCellDef="let row">{{ row.extraItem1 }}</td>
+    </ng-container>
+
+    <!-- 附加品項2 -->
+    <ng-container matColumnDef="extraItem2">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>附加品項2</th>
+      <td mat-cell *matCellDef="let row">{{ row.extraItem2 }}</td>
+    </ng-container>
+
+    <!-- 備註 -->
+    <ng-container matColumnDef="note">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>備註</th>
+      <td mat-cell *matCellDef="let row">{{ row.note }}</td>
+    </ng-container>
+
+    <!-- 總計金額 -->
+    <ng-container matColumnDef="total">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>總計金額</th>
+      <td mat-cell *matCellDef="let row">{{ row.total }}</td>
+    </ng-container>
+
+    <!-- 店販 -->
+    <ng-container matColumnDef="retail">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>店販</th>
+      <td mat-cell *matCellDef="let row">{{ row.retail }}</td>
+    </ng-container>
+
+    <!-- 營業額 -->
+    <ng-container matColumnDef="revenue">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>營業額</th>
+      <td mat-cell *matCellDef="let row">{{ row.revenue }}</td>
+    </ng-container>
+
+    <!-- 店販日額 -->
+    <ng-container matColumnDef="dailyRetail">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>店販日額</th>
+      <td mat-cell *matCellDef="let row">{{ row.dailyRetail }}</td>
+    </ng-container>
+
+    <!-- 配方備註 -->
+    <ng-container matColumnDef="formulaNote">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>配方備註</th>
+      <td mat-cell *matCellDef="let row">{{ row.formulaNote }}</td>
+    </ng-container>
+
+    <!-- 表頭與資料列 -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <!-- 分頁器 -->
+  <mat-paginator #paginator
+    [length]="dataSource.data.length"
+    [pageIndex]="0"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 20]"
+    aria-label="Select page">
+  </mat-paginator>
+</div>
