@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"log"
 	"time"
-
+	"os"
+	"strconv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -24,14 +25,32 @@ type DBConfig struct {
 
 // DefaultDBConfig 返回預設資料庫配置
 func DefaultDBConfig() *DBConfig {
-	return &DBConfig{
-		Host:     "localhost",
-		Port:     5432,
-		User:     "postgres",
-		Password: "password",
-		DBName:   "userauth",
-		SSLMode:  "disable",
+	config := &DBConfig{
+		Host:     getEnv("DB_HOST", "localhost"),
+		User:     getEnv("DB_USER", "postgres"),
+		Password: getEnv("DB_PASSWORD", "password"),
+		DBName:   getEnv("DB_NAME", "userauth"),
+		SSLMode:  getEnv("DB_SSL_MODE", "disable"),
 	}
+
+	portStr := getEnv("DB_PORT", "5432")
+	port, err := strconv.Atoi(portStr)
+	if err != nil {
+		log.Printf("警告: 無法解析 DB_PORT 環境變數，使用預設值 5432: %v", err)
+		port = 5432
+	}
+	config.Port = port
+
+	return config
+}
+
+// getEnv 獲取環境變數，如果不存在則返回預設值
+func getEnv(key, defaultValue string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		return defaultValue
+	}
+	return value
 }
 
 // SetupDB 初始化 GORM 資料庫連接
