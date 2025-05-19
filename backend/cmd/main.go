@@ -6,6 +6,7 @@ import (
 	"log"
 	"path/filepath"
 	"time"
+	"strconv"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -17,6 +18,7 @@ import (
 	"backend/internal/services"
 	"backend/pkg/configs"
 	"backend/internal/auth"
+	"backend/pkg/utils"
 )
 
 func main() {
@@ -74,11 +76,13 @@ func main() {
 	r := gin.Default()
 	
 	// 設定可信代理
-	r.SetTrustedProxies([]string{"127.0.0.1"})
-	
+	r.SetTrustedProxies([]string{"127.0.0.1", "172.16.0.0/12", "192.168.0.0/16"})
+
 	// 設定 CORS
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:4200"}, // 前端網址
+		AllowOrigins:     []string{ "http://localhost:4200", 
+        "http://frontend:4200",
+        utils.GetEnv("FRONTEND_URL", "http://localhost:4200")}, // 前端網址
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -89,7 +93,11 @@ func main() {
 	// 公開路由
 	r.POST("/api/login/google", authHandler.HandleGoogleSignIn)
 	r.GET("/api/logout", authHandler.HandleLogout)
-
+	r.GET("/api/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"status": "ok",
+		})
+	})
 	// 受保護路由
 	api := r.Group("/api")
 	api.Use(authMiddleware.AuthRequired())
@@ -101,9 +109,10 @@ func main() {
 	}
 
 	// 啟動服務器
-	port := 8080
-	log.Printf("服務器啟動於 http://localhost:%d", port)
-	if err := r.Run(fmt.Sprintf(":%d", port)); err != nil {
+	port := utils.GetEnv("PORT", "8080")
+	portInt, _ := strconv.Atoi(port)
+	log.Printf("服務器啟動於 :%d", portInt)
+	if err := r.Run(fmt.Sprintf(":%s", port)); err != nil {
 		log.Fatalf("服務器啟動失敗: %v", err)
 	}
 }

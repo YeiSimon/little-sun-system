@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 export interface UserInfo {
   name: string;
@@ -17,6 +18,7 @@ export interface UserInfo {
 export class AuthService {
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   private userInfoSubject = new BehaviorSubject<UserInfo | null>(null);
+  private apiUrl = environment.apiUrl;
 
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
   public userInfo$ = this.userInfoSubject.asObservable();
@@ -48,7 +50,7 @@ export class AuthService {
   }
 
   loginWithGoogle(credential: string): Observable<any> {
-    return this.http.post<any>('http://localhost:8080/api/login/google', { credential }, { withCredentials: true });
+    return this.http.post<any>(`${this.apiUrl}${environment.authEndpoints.googleLogin}`, { credential }, { withCredentials: true });
   }
 
   setLoggedInUser(userInfo: UserInfo): void {
@@ -90,5 +92,4 @@ export class AuthService {
     
   }
 
-  
 }
